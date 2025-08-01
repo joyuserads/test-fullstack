@@ -1,5 +1,6 @@
 
 const express = require('express');
+const usuarioRoutes = require('./routers/usuarioRoutes');
 
 const app = express();
 
@@ -11,7 +12,7 @@ app.use(express.json());
 // swagger
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('../src/docs/swagger.js');
-const port = process.env.PORT || 3000;
+
 
 
 //banco 
@@ -22,17 +23,16 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec )); // SWAGGER
 
 //Rotas
 const noticiaController = require('./controllers/noticiaController.js');
-const usuarioController = require('./controllers/usuarioController.js');
 
-
+app.use('/api/usuarios', usuarioRoutes);
 
 app.use((req, res, next) => {
   req.db = db; // passa o banco para uso em qualquer rota
   next();
 });
 
-app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost:${port}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Servidor rodando em http://localhost:${process.env.PORT}`);
     console.log('Documentação Swagger http://localhost:3000/api-docs')
 });
 
